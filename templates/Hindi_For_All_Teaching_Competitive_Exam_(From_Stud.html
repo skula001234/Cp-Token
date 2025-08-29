@@ -254,105 +254,116 @@
     <div class="footer">Extracted By - <a href="https://t.me/VeerJaatOffline" target="_blank">ʀ ᴇ ᴀ ᴄ ʜ ᴇ ʀ</a></div>
 
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-    <script>
-        const player = videojs('engineer-babu-player', {
-            controls: true,
-            autoplay: false,
-            preload: 'auto',
-            fluid: true,
-            controlBar: {
-                children: [
-                    'playToggle',
-                    'volumePanel',
-                    'currentTimeDisplay',
-                    'timeDivider',
-                    'durationDisplay',
-                    'progressControl',
-                    'liveDisplay',
-                    'remainingTimeDisplay',
-                    'customControlSpacer',
-                    'playbackRateMenuButton',
-                    'chaptersButton',
-                    'descriptionsButton',
-                    'subsCapsButton',
-                    'audioTrackButton',
-                    'fullscreenToggle'
-                ]
+<script>
+    // URL बदलने वाला कोड
+    window.onload = function() {
+        const videoLinks = document.querySelectorAll('.video-list a');
+        videoLinks.forEach(function(link) {
+            if (link.href.includes('https://apps-s3-jw-prod.utkarshapp.com/')) {
+                link.href = link.href.replace('https://apps-s3-jw-prod.utkarshapp.com/', 'https://d1q5ugnejk3zoi.cloudfront.net/ut-production-jw/');
             }
         });
+    };
 
-        function playVideo(url) {
-            if (url.includes('.m3u8')) {
-                document.getElementById('video-player').style.display = 'block';
-                player.src({ src: url, type: 'application/x-mpegURL' });
-                player.play().catch(() => {
-                    window.open(url, '_blank');
-                });
-            } else {
+    const player = videojs('engineer-babu-player', {
+        controls: true,
+        autoplay: false,
+        preload: 'auto',
+        fluid: true,
+        controlBar: {
+            children: [
+                'playToggle',
+                'volumePanel',
+                'currentTimeDisplay',
+                'timeDivider',
+                'durationDisplay',
+                'progressControl',
+                'liveDisplay',
+                'remainingTimeDisplay',
+                'customControlSpacer',
+                'playbackRateMenuButton',
+                'chaptersButton',
+                'descriptionsButton',
+                'subsCapsButton',
+                'audioTrackButton',
+                'fullscreenToggle'
+            ]
+        }
+    });
+
+    function playVideo(url) {
+        if (url.includes('.m3u8')) {
+            document.getElementById('video-player').style.display = 'block';
+            player.src({ src: url, type: 'application/x-mpegURL' });
+            player.play().catch(() => {
                 window.open(url, '_blank');
-            }
-        }
-
-        function toggleUrlInput() {
-            const urlInputContainer = document.getElementById('url-input-container');
-            urlInputContainer.style.display = urlInputContainer.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function playCustomUrl() {
-            const url = document.getElementById('url-input').value;
-            if (url) {
-                playVideo(url);
-            }
-        }
-
-        function showContent(tabName) {
-            const contents = document.querySelectorAll('.content');
-            contents.forEach(content => {
-                content.style.display = 'none';
             });
-            const selectedContent = document.getElementById(tabName);
-            if (selectedContent) {
-                selectedContent.style.display = 'block';
-            }
-            filterContent();
+        } else {
+            window.open(url, '_blank');
         }
+    }
 
-        function filterContent() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const categories = ['videos', 'pdfs', 'others'];
-            let hasResults = false;
+    function toggleUrlInput() {
+        const urlInputContainer = document.getElementById('url-input-container');
+        urlInputContainer.style.display = urlInputContainer.style.display === 'none' ? 'block' : 'none';
+    }
 
-            categories.forEach(category => {
-                const items = document.querySelectorAll(`#${category} .${category}-list a`);
-                let categoryHasResults = false;
+    function playCustomUrl() {
+        const url = document.getElementById('url-input').value;
+        if (url) {
+            playVideo(url);
+        }
+    }
 
-                items.forEach(item => {
-                    const itemText = item.textContent.toLowerCase();
-                    if (itemText.includes(searchTerm)) {
-                        item.style.display = 'block';
-                        categoryHasResults = true;
-                        hasResults = true;
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
+    function showContent(tabName) {
+        const contents = document.querySelectorAll('.content');
+        contents.forEach(content => {
+            content.style.display = 'none';
+        });
+        const selectedContent = document.getElementById(tabName);
+        if (selectedContent) {
+            selectedContent.style.display = 'block';
+        }
+        filterContent();
+    }
 
-                const categoryHeading = document.querySelector(`#${category} h2`);
-                if (categoryHeading) {
-                    categoryHeading.style.display = categoryHasResults ? 'block' : 'none';
+    function filterContent() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const categories = ['videos', 'pdfs', 'others'];
+        let hasResults = false;
+
+        categories.forEach(category => {
+            const items = document.querySelectorAll(`#${category} .${category}-list a`);
+            let categoryHasResults = false;
+
+            items.forEach(item => {
+                const itemText = item.textContent.toLowerCase();
+                if (itemText.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    categoryHasResults = true;
+                    hasResults = true;
+                } else {
+                    item.style.display = 'none';
                 }
             });
 
-            const noResultsMessage = document.getElementById('noResults');
-            if (noResultsMessage) {
-                noResultsMessage.style.display = hasResults ? 'none' : 'block';
+            const categoryHeading = document.querySelector(`#${category} h2`);
+            if (categoryHeading) {
+                categoryHeading.style.display = categoryHasResults ? 'block' : 'none';
             }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            showContent('videos');
         });
-    </script>
+
+        const noResultsMessage = document.getElementById('noResults');
+        if (noResultsMessage) {
+            noResultsMessage.style.display = hasResults ? 'none' : 'block';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showContent('videos');
+    });
+</script>
 </body>
 </html>
+
     
